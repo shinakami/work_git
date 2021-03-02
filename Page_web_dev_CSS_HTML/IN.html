@@ -1,0 +1,25 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312"/>
+<title>JavaScript控制頁面5秒後自動跳轉的程式碼</title>
+<script type="javascript"> 
+function countDown(secs,surl){ 
+//alert(surl); 
+var jumpTo = document.getElementById('jumpTo');
+jumpTo.innerHTML=secs; 
+if(--secs>0){ 
+    setTimeout("countDown(" secs ",'" surl "')",1000); 
+}
+else
+{  
+    location.href=surl; 
+} 
+} 
+</script>
+</head>
+<body><span id="jumpTo">5</span>
+<script type="javascript">
+    countDown(5,'//test.html/');
+</script> 
+</body>
+</html>

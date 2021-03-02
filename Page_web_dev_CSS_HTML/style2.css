@@ -1,0 +1,39 @@
+@media(min-width: 1900px){
+    .tsuki{
+        background-image: url(80296546_p0.png);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position-x: center;
+        background-position-y: center;
+        padding-bottom: 1400px;
+        animation: Innext ease 7s;
+    }
+    @keyframes Innext{
+        0%{
+            opacity: 0;
+        }
+        100%{
+            opacity: 1;
+        }
+    }
+}
+
+@media(min-width: 1024px){
+    .tsuki{
+        background-image: url(80296546_p0.png);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position-x: center;
+        background-position-y: center;
+        padding-bottom: 1000px;
+        animation: Innext ease 7s;
+    }
+    @keyframes Innext{
+        0%{
+            opacity: 0;
+        }
+        100%{
+            opacity: 1;
+        }
+    }
+}
