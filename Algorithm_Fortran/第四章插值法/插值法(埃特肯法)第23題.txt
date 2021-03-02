@@ -1,0 +1,46 @@
+!  HomeWorkinter4.f90 
+!
+!  FUNCTIONS:
+!  HomeWorkinter4 - Entry point of console application.
+!
+
+!****************************************************************************
+!
+!  PROGRAM: HomeWorkinter4
+!
+!  PURPOSE:  Entry point for the console application.
+!
+!****************************************************************************
+
+    program HomeWorkinter4
+
+    implicit none
+
+    ! Variables
+    real X(3),Y(3,3)
+    real Xr,ans,error
+    integer i,j,N
+    N=3
+    Xr=0.2
+    ! Body of HomeWorkinter4
+    X(1)=0.0
+    X(2)=0.1
+    X(3)=0.3
+    Y(1,1)=1.0000
+    Y(2,1)=1.1052
+    Y(3,1)=1.3499
+    do i=2,N
+        do j=2,i
+            Y(i,j)=((Y(j-1,j-1)*(X(i)-Xr))-(Y(i,j-1)*(X(j-1)-Xr)))/(X(i)-X(j-1))
+        enddo
+    enddo
+    write(*,77)Xr,Y(N,N)
+77  format("F(",F2.1,")=",F9.7)
+    ans=exp(0.2)
+    write(*,87)ans
+87  format("True answer=",F9.7)
+    error=abs(ans-Y(N,N))
+    write(*,97)error
+97  format(/,"Error=",F9.7)
+    pause
+    end program HomeWorkinter4

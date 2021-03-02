@@ -1,0 +1,61 @@
+!  HomeWorkdev2.f90 
+!
+!  FUNCTIONS:
+!  HomeWorkdev2 - Entry point of console application.
+!
+
+!****************************************************************************
+!
+!  PROGRAM: HomeWorkdev2
+!
+!  PURPOSE:  Entry point for the console application.
+!
+!****************************************************************************
+
+    program HomeWorkdev2
+
+    implicit none
+
+    ! Variables
+    real Y(100),D(100,100)
+    real h,h1,eps
+    integer i,j,N,M,K,L,Ka,Ks
+    N=10
+    K=5
+    L=4
+    M=3
+    h=0.4
+    eps=0.0001
+    ! Body of HomeWorkdev2
+    Y(1)=1.0933
+    Y(2)=1.4096
+    Y(3)=1.7804
+    Y(4)=2.2136
+    Y(5)=2.7183
+    Y(6)=3.3046
+    Y(7)=3.9841
+    Y(8)=4.7701
+    Y(9)=5.6773
+    Y(10)=6.7225
+    h1=h*2
+    do i=1,M
+        Ka=K+L
+        Ks=K-L
+        D(i,1)=(Y(Ka)-Y(Ks))/(2*h) !!公式(6.101)
+        h=h/2
+        L=L/2
+    enddo
+    do j=2,M
+        do i=j,M
+            D(i,j)=(D(i,j-1)*4**(j-1)-D(i-1,j-1))/(4**(j-1)-1) !!公式(6.102)           
+        enddo
+    enddo
+    do i=1,M
+        if(abs(D(i+1,i+1)-D(i,i))<=eps)then 
+            goto 112
+        endif
+    enddo
+112 write(*,45)D(M,M)
+45  format("x=1.0之導數值=",F8.3)   
+    pause
+    end program HomeWorkdev2

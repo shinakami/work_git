@@ -1,0 +1,71 @@
+!  HomeWorkintegral2.f90 
+!
+!  FUNCTIONS:
+!  HomeWorkintegral2 - Entry point of console application.
+!
+
+!****************************************************************************
+!
+!  PROGRAM: HomeWorkintegral2
+!
+!  PURPOSE:  Entry point for the console application.
+!
+!****************************************************************************
+
+
+    
+    program HomeWorkintegral2
+
+    ! Variables
+    real W(4,6),T(4,6)
+    real ans,A,B,X,F,k,eps,C,temp,delt,R
+    integer Ipoint,i,kk,Ip2,Ipm2
+    ! Body of HomeWorkintegral2
+    A=0
+    B=4
+    k=0
+    pi=atan(1.0)*4
+    F=exp(-X*X/2)/sqrt(2*pi)
+    if(k==0)then
+        goto 11
+    endif
+    goto 30
+11  ans=1  
+    Ipoint=2
+    eps=0.0001
+    do i=1,4
+        Ip2=i+2
+        read(*,*)(W(i,kk),kk=1,Ip2)
+        read(*,*)(T(i,kk),kk=1,Ip2)
+    enddo
+    C=(B-A)/2
+18  Ipoint=Ipoint+1
+    temp=ans
+    ans=0
+    Ipm2=Ipoint-2
+    k=1
+20  X=C*T(Ipm2,k)+(B+A)/2
+30  ans=ans+C*W(Ipm2,k)*F
+    k=k+1
+    if(k<=Ipoint)then
+        goto 20
+    endif
+    if(Ipoint<=3)then
+        goto 18
+    endif
+    delt=abs(ans-temp)
+    R=delt/abs(temp)
+    if(R>eps)then
+        goto 80
+    endif
+    write(*,878)ans
+878 format("積分數值=",F10.3)
+    k=7
+80  if(Ipoint<6)then
+        goto 18
+    endif
+    write(*,87)ans
+87  format("積分數值=",F10.3)
+    k=7
+    pause
+    end program HomeWorkintegral2

@@ -1,0 +1,67 @@
+!  HomeWorkintegral1.f90 
+!
+!  FUNCTIONS:
+!  HomeWorkintegral1 - Entry point of console application.
+!
+
+!****************************************************************************
+!
+!  PROGRAM: HomeWorkintegral1
+!
+!  PURPOSE:  Entry point for the console application.
+!
+!****************************************************************************
+
+    program HomeWorkintegral1
+
+    implicit none
+
+    ! Variables
+    real A(100,100)
+    real test,y,x0,xn,x,xL,sum,y1,y2,h,eps,y3
+    integer N,i,j,IJ,M,K,L,KL,KK,JJ,AIJ
+    eps=0.0001
+    L=10
+    K=4
+    x0=0 !!積分下限
+    xn=1.6 !!積分上限
+    ! Body of HomeWorkintegral1
+    y=1/(1+x**2)
+    x=x0
+    y1=1/(1+x**2)
+    x=xn
+    y2=1/(1+x**2)
+    xL=xn-x0
+    sum=y1+y2
+    A(1,1)=xL/2*sum
+    h=xL
+    KL=K
+    M=2
+    do i=1,L
+        do j=M,K
+            h=h/2
+            N=2**(j-1)-1
+            do IJ=1,N,2
+                AIJ=IJ
+                x=x0+AIJ*H
+                y3=1/(1+x**2)
+                sum=sum+2*y3
+                A(j,1)=h/2*sum
+            enddo
+        enddo
+        do KK=2,K
+            do JJ=KK,K
+                A(JJ,KK)=(A(JJ,KK-1)*4**(KK-1)-A(JJ-1,KK-1))/(4**(K-1)-1)         
+            enddo
+        enddo
+        test=A(K,K)-A(K-1,K-1)
+        if(abs(test)<=eps)then
+            goto 112
+        endif
+        K=K+KL
+        M=K-3
+    enddo
+112 write(*,88)A(K,K)
+88  format(/,"dx/(x**2)積分值=",F8.3)
+    pause
+    end program HomeWorkintegral1

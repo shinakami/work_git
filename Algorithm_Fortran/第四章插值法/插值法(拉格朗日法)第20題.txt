@@ -1,0 +1,52 @@
+!  HomeWorkinter3.f90 
+!
+!  FUNCTIONS:
+!  HomeWorkinter3 - Entry point of console application.
+!
+
+!****************************************************************************
+!
+!  PROGRAM: HomeWorkinter3
+!
+!  PURPOSE:  Entry point for the console application.
+!
+!****************************************************************************
+
+    program HomeWorkinter3
+
+    implicit none
+
+    ! Variables
+    real X(3),Y(3)
+    real Xr,total,sum,ans,error
+    integer i,k,N
+    N=3
+    sum=0
+    Xr=0.2
+    ! Body of HomeWorkinter3
+    X(1)=0.0
+    X(2)=0.1
+    X(3)=0.3
+    Y(1)=1.0000
+    Y(2)=1.1052
+    Y(3)=1.3499
+    do k=1,N
+        total=Y(k)
+        do i=1,N
+            if(i==k)then
+                goto 22
+            endif
+            total=total*(Xr-X(i))/(X(k)-X(i))
+22      enddo
+        sum=sum+total
+    enddo
+    write(*,77)Xr,sum
+77  format("F(",F2.1,")=",F9.7)
+    ans=exp(0.2)
+    write(*,87)ans
+87  format("True answer=",F9.7)
+    error=abs(ans-sum)
+    write(*,97)error
+97  format(/,"Error=",F9.7)
+    pause 
+    end program HomeWorkinter3

@@ -1,0 +1,134 @@
+!  HomeWorkmatrix3.f90 
+!
+!  FUNCTIONS:
+!  HomeWorkmatrix3 - Entry point of console application.
+!
+
+!****************************************************************************
+!
+!  PROGRAM: HomeWorkmatrix3
+!
+!  PURPOSE:  Entry point for the console application.
+!
+!****************************************************************************
+
+    program HomeWorkmatrix3
+
+    implicit none
+
+    ! Variables
+    real A(4,4),B(4),X_ans(4),L(4,4),A_T(4,4),K(4)
+    real sum,sum1,temp
+    integer i,j,N,LM,a1,p
+    N=4
+    sum=0
+    ! Body of HomeWorkmatrix3
+    !!A矩陣
+    write(*,*)"說明:原題目矩陣無解(更換對角線數字方有解)老師更改"
+    A(1,1)=10
+    A(1,2)=2
+    A(1,3)=4
+    A(1,4)=7
+    A(2,1)=2
+    A(2,2)=2
+    A(2,3)=-1
+    A(2,4)=3
+    A(3,1)=4
+    A(3,2)=-1
+    A(3,3)=9
+    A(3,4)=2
+    A(4,1)=7
+    A(4,2)=3
+    A(4,3)=2
+    A(4,4)=10
+    !!B矩陣
+    B(1)=45
+    B(2)=10
+    B(3)=-7
+    B(4)=43
+    write(*,*)"A_matrix="
+    do i=1,N
+        write(*,15)(A(i,j),j=1,N)
+15      format(2X,4F6.2)        
+    enddo 
+    write(*,*)"B_matrix="
+    do i=1,N
+        write(*,95)B(i)
+95      format(2X,F6.2)        
+    enddo 
+    write(*,77)
+77  format(/)
+    !!A矩陣轉置
+    do i=1,N
+        do j=1,N
+            A_T(i,j)=A(j,i)
+        enddo
+    enddo
+    do i=1,N
+        do j=i,N
+            if(A(i,j)/=A_T(i,j))then
+                write(*,*)"非對稱矩陣"
+                goto 88
+            endif
+        enddo
+    enddo
+    if(A(1,1)<=0)then
+        write(*,*)"這一個矩陣無法用寇列斯基法解決"
+        goto 88
+    endif
+    L(1,1)=sqrt(A(1,1)) !!公式(3.121)
+    do  j=2,N
+        L(1,j)=A(1,j)/L(1,1) !!公式(3.122)
+    enddo
+    do i=2,N
+        LM=i-1
+        sum=0
+        do a1=1,LM  !!公式(3.123)
+            sum=sum+L(a1,i)
+            sum1=sum*sum
+            temp=A(i,i)-sum1
+            L(i,i)=sqrt(temp)
+        enddo
+    enddo
+    do i=2,N
+        LM=i-1
+        do j=1,N
+            sum=0
+            if(i==j)then
+                goto 37
+            elseif(i>j)then
+                goto 47
+            elseif(i<j)then
+                do a1=1,LM
+                    sum=sum+L(a1,i)*L(a1,j)
+                enddo
+            endif
+            L(i,j)=(A(i,j)-sum)/L(i,i) !!公式(3.124)
+            goto 37
+47          L(i,j)=0  !!公式(3.125)
+37      enddo      
+    enddo
+    K(1)=B(1)/L(1,1)
+    do i=2,N
+        LM=i-1
+        sum=0
+        do p=1,LM
+            sum=sum+L(p,i)*K(p)
+            K(i)=(B(i)-sum)/L(i,i) !!公式(3.127)
+        enddo
+    enddo
+    X_ans(N)=K(N)/L(N,N)
+    do i=N-1,1,-1
+        LM=i+1
+        sum=0
+        do p=LM,N
+            sum=sum+L(i,p)*X_ans(p)
+            X_ans(i)=(K(i)-sum)/L(i,i)
+        enddo
+    enddo
+    do i=1,N
+        write(*,123)i,X_ans(i)
+123     format("X(",I1,")=",F10.5)
+    enddo
+88  pause
+    end program HomeWorkmatrix3

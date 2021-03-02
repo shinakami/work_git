@@ -1,0 +1,246 @@
+!  HomeWork3nonlinear.f90 
+!
+!  FUNCTIONS:
+!  HomeWork3nonlinear - Entry point of console application.
+!
+
+!****************************************************************************
+!
+!  PROGRAM: HomeWork3nonlinear
+!
+!  PURPOSE:  Entry point for the console application.
+!
+!****************************************************************************
+
+    program HomeWork3nonlinear
+
+   implicit none
+    !!第二章2-3題半間距法2.0*exp(-x)-sin(x)
+    ! Variables
+    real x,eps,test_num,form1,form2,a,b,form_ans,x_new,form_old
+    real xdev,deva
+    dimension A_beg(5),B_beg(5),C_beg(4),X_beg(200)
+    real A_beg,B_beg,C_beg,X_beg
+    integer N,I,NO,K,J,M,L,T,KO
+    eps=0.0001
+    ! Body of HomeWork3nonlinear
+    write(*,*)"第二章2-3題半間距法 2.0*exp(-x)-sin(x)"
+11  write(*,*)"a="
+    read(*,*)a  !!輸入a=9即有解
+    form_ans=1
+    b=a+1
+    x=a
+    form1=2.0*exp(-x)-sin(x)
+    x=b
+    form2=2.0*exp(-x)-sin(x)
+    test_num=form1*form2
+    if(test_num<0)then
+        do while(abs(form_ans)>eps)
+            x_new=(a+b)/2
+            x=x_new
+            form_ans=2.0*exp(-x)-sin(x)
+            x=a
+            form1=2.0*exp(-x)-sin(x)
+            x=x_new
+            form2=2.0*exp(-x)-sin(x)
+            if(form1*form2<0)then
+                b=x_new
+            else
+                a=x_new
+            endif
+        enddo
+        write(*,*)"F(x)=2.0*exp(-x)-sin(x)"
+        write(*,12)x,form_ans
+12      format(/,"x=",F7.3,"的時候",/,"F(x)=",F6.3)
+        write(*,13)x
+13      format("x=",F7.3,"為F(x)的根")  
+    else
+        write(*,*)"再選擇一個新的數字a(該數字無法求得根)"
+        goto 11
+    endif
+    pause
+    
+    !!第二章第4題假位法1+cos(x)-4x
+    ! Variables
+    x=0
+    form1=0
+    form2=0
+    form_ans=1
+    x_new=0
+    a=0
+    b=0
+    eps=0.0001
+    ! Body of HomeWork3nonlinear
+    write(*,*)"第二章第4題假位法 1+cos(x)-4x"
+    write(*,*)"a="
+    read(*,*)a
+    write(*,*)"b="
+    read(*,*)b
+    do while(abs(form_ans)>=eps)
+        x=a
+        form1=1+cos(x)-4*x
+        x=b
+        form2=1+cos(x)-4*x
+        x_new=a+form1*(b-a)/(form1-form2)
+        x=x_new
+        form_ans=1+cos(x)-4*x
+        b=x_new
+    enddo
+    write(*,*)"F(x)=1+cos(x)-4x"
+    write(*,14)x,form_ans
+14  format(/,"x=",F8.6,"的時候",/,"F(x)=",F6.3)
+    write(*,15)x
+15  format("x=",F8.6,"為F(x)的根")  
+    pause
+    
+    
+    !!第二章第5題割線法x**3-1.473*x**2-5.738*x+6.763
+    ! Variables
+    x=0
+    form1=0
+    form2=0
+    x_new=0
+    a=0
+    b=0
+    eps=0.0001
+    T=1
+    form_old=0
+    ! Body of HomeWork3nonlinear 
+    write(*,*)"第二章第5題割線法 x**3-1.473*x**2-5.738*x+6.763"
+    write(*,*)"測試次數=" !!輸入N=3
+    read(*,*)KO
+111 form_ans=1
+    !!輸入a=123,b=-9(第一個根),a=12,b=2(第二個根),a=1254,b=1(第三個根)
+    write(*,*)"a="
+    read(*,*)a
+    write(*,*)"b="
+    read(*,*)b
+    do while(abs(form_ans)>=eps)
+        x=a
+        form1=x**3-1.473*x**2-5.738*x+6.763
+        x=b
+        form2=x**3-1.473*x**2-5.738*x+6.763
+        x_new=form1*b/(form1-form2)+form2*a/(form2-form1)
+        x=x_new
+        form_ans=x**3-1.473*x**2-5.738*x+6.763
+        a=b
+        b=x_new
+    enddo
+    if(abs(form_ans)<eps)then
+        T=T+1
+    endif
+    write(*,*)"F(x)=x**3-1.473*x**2-5.738*x+6.763"
+    write(*,16)x,form_ans
+16  format(/,"x=",F7.3,"的時候",/,"F(x)=",F6.3)
+    write(*,17)x
+17  format("x=",F7.3,"為F(x)的根")
+    if(T<=KO)then
+        goto 111
+    endif
+    pause
+    
+    
+    !!第二章第8題牛頓法聯立方程式
+    ! Variables
+    xdev=0
+    x=0
+    form1=0
+    form2=0
+    form_ans=1
+    x_new=0
+    a=0
+    b=0
+    eps=0.0001
+    deva=10
+    ! Body of HomeWork3nonlinear 
+    write(*,*)"第二章第8題牛頓法 exp(x)-2-log10(x+2)"
+    write(*,*)"a="
+    read(*,*)a
+    do while(abs(form_ans)>=eps)
+        x=a
+        form1=exp(x)-2-log10(x+2)
+        xdev=exp(x)-1/((x+2)*log(deva)) !!微分
+        x_new=a-form1/xdev
+        x=x_new
+        form_ans=exp(x)-2-log10(x+2)
+        a=x_new
+    enddo
+    write(*,*)"F(x)=exp(x)-2-log10(x+2)"
+    write(*,18)x,form_ans
+18  format(/,"x=",F7.3,"的時候",/,"F(x)=",F6.3)
+    write(*,19)x
+19  format("x=",F7.3,"為F(x)的根")  
+    pause
+    
+    
+    !!第二章第12-2題伯基-維塔法x**4-4.4*x**3+9.43*x**2-14.86*x+7.15
+    ! Variables
+    form_ans=1
+    eps=0.0001
+    NO=1
+    test_num=0
+    I=1
+    x=0
+    ! Body of HomeWork3nonlinear 
+    write(*,*)"第二章第12-2題伯基-維塔法 x**4-4.4*x**3+9.43*x**2-14.86*x+7.15"
+    N=5 !!常數個數=5
+    A_beg(1)=7.15
+    A_beg(2)=-14.86
+    A_beg(3)=9.43
+    A_beg(4)=-4.4
+    A_beg(5)=1
+    !!歸零
+    do I=1,200
+        X_beg(I)=0
+    enddo
+    do I=1,5
+        B_beg(I)=0
+    enddo
+    do I=1,4
+        C_beg(I)=0
+    enddo
+    write(*,*)"初始值Xn=" !!輸入1
+    read(*,*)X_beg(1)
+33  X_beg(2)=X_beg(1)-A_beg(1)/A_beg(2)
+    B_beg(N)=A_beg(N)
+    do I=2,160
+        test_num=abs(X_beg(I)-X_beg(I-1))
+        if(test_num>eps)then
+            do J=2,N
+                K=N+1-J
+                B_beg(K)=A_beg(K)+X_beg(I)*B_beg(K+1)
+            enddo
+            C_beg(N-1)=B_beg(N)
+            do L=3,N
+                M=N+1-L
+                C_beg(M)=B_beg(M+1)+X_beg(I)*C_beg(M+1)
+            enddo
+        elseif(test_num<=eps)then
+            goto 30
+        endif
+        X_beg(I+1)=X_beg(I)-B_beg(1)/C_beg(1)
+    enddo
+30  write(*,31)NO,X_beg(I)
+31  format(/,"近似根","S(",I1,")=",F10.3) 
+    x=X_beg(I)
+    form_ans=x**4-4.4*x**3+9.43*x**2-14.86*x+7.15
+    write(*,44)form_ans
+44  format("F(x)=",F10.3)
+    if(abs(form_ans)>eps*10)then
+        write(*,*)"此根伯基維塔法無法求得"
+    endif
+    NO=NO+1
+    if(N>2)then
+        N=N-1
+    elseif(N<=2)then
+        goto 32
+    endif
+    do I=1,N
+        B_beg(I)=B_beg(I+1)
+        A_beg(I)=B_beg(I)
+    enddo
+    goto 33
+32  pause
+    
+    
+    end program HomeWork3nonlinear

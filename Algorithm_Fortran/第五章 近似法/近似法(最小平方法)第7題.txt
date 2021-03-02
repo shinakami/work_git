@@ -1,0 +1,149 @@
+!  HomeWorkAPP1.f90 
+!
+!  FUNCTIONS:
+!  HomeWorkAPP1 - Entry point of console application.
+!
+
+!****************************************************************************
+!
+!  PROGRAM: HomeWorkAPP1
+!
+!  PURPOSE:  Entry point for the console application.
+!
+!****************************************************************************
+    subroutine matrix(A,B,N,eps)
+    real A(100,100),B(100)
+    real delt
+    integer i,j,N,K,M
+    do i=1,N
+        K=i
+        if(i<N .or. i>N)then
+            goto 25
+        elseif(i==N)then
+            goto 30
+        endif
+25      if(abs(A(i,i))<=eps)then
+            goto 35
+        elseif(abs(A(i,i))>eps)then
+            goto 30
+        endif
+35      K=K+1
+        do j=1,N
+            A(i,j)=A(i,j)+A(K,j)
+            B(i)=B(i)+B(K)
+        enddo
+        goto 25
+30      do j=1,N
+            A(i,j)=A(i,j)/A(i,i)
+        enddo
+        B(i)=B(i)/A(i,i)
+        do M=1,N
+            delt=A(M,i)
+            if(abs(delt)<=eps)then
+                goto 20
+            elseif(abs(delt)>eps)then
+                goto 50
+            endif
+50          if(M<i .or. M>i)then
+                goto 55
+            elseif(M==i)then
+                goto 20
+            endif
+55          B(M)=B(M)-B(i)*delt
+            do j=1,N
+                A(M,j)=A(M,j)-A(i,j)*delt
+            enddo
+        enddo
+    enddo
+20  return
+    end
+    
+    program HomeWorkAPP1
+
+    implicit none
+
+    ! Variables
+    real X(100),Y(100),C(100),U(100),P(100),B(100,100),C_ans(100)
+    real sum,xx,yy,LIM,eps,C1,C2,C3
+    integer i,j,N,L,M,K,R,NN,LL,KK
+    M=12
+    LIM=3
+    eps=0.0001
+    ! Body of HomeWorkAPP1
+    !!月份
+    X(1)=1
+    X(2)=2
+    X(3)=3
+    X(4)=4
+    X(5)=5
+    X(6)=6
+    X(7)=7
+    X(8)=8
+    X(9)=9
+    X(10)=10
+    X(11)=11
+    X(12)=12
+    !!庫存量
+    Y(1)=0.36
+    Y(2)=0.37
+    Y(3)=0.39
+    Y(4)=0.42
+    Y(5)=0.46
+    Y(6)=0.50
+    Y(7)=0.53
+    Y(8)=0.59
+    Y(9)=0.65
+    Y(10)=0.72
+    Y(11)=0.77
+    Y(12)=0.84
+    N=2
+55  do i=1,N
+        C(i)=0
+    enddo
+    L=2*N-1
+    do i=1,L
+        U(i)=0
+    enddo
+    do K=1,M
+        xx=1
+        do i=2,L
+            xx=xx*X(K) !!公式(5.14)
+            U(i)=U(i)+xx
+        enddo
+        yy=1
+        yy=yy*Y(K)
+        C(1)=C(1)+yy
+        do i=2,N
+            yy=yy*X(K)  !!公式(5.15)
+            C(i)=C(i)+yy
+        enddo
+    enddo
+    U(1)=M
+    do i=1,N
+        do j=1,N
+            LL=i+j-1
+            B(i,j)=U(LL)
+        enddo
+    enddo
+    call matrix(B,C,N,eps)
+    N=N+1
+    if(N<=LIM)then      
+        goto 55
+    endif
+    do i=1,N-1
+        C_ans(i)=C(i)
+        if(i==1)then
+            C1=C_ans(i)
+        elseif(i==2)then
+            C2=C_ans(i)
+        elseif (i==3)then
+            C3=C_ans(i)
+        endif
+        write(*,37)i,C_ans(i)
+37      format("C(",I1,")=",F10.2)
+    enddo
+    
+    write(*,123)C1,C2,C3
+123 format("F(x)=",F10.2,"+",F10.2,"x+",F10.2,"x**2")
+    pause
+    end program HomeWorkAPP1

@@ -1,0 +1,125 @@
+!  HomeWorkAPP2.f90 
+!
+!  FUNCTIONS:
+!  HomeWorkAPP2 - Entry point of console application.
+!
+
+!****************************************************************************
+!
+!  PROGRAM: HomeWorkAPP2
+!
+!  PURPOSE:  Entry point for the console application.
+!
+!****************************************************************************
+
+    program HomeWorkAPP2
+
+    implicit none
+
+    ! Variables
+    real Y(100),X(100),R(100),X_bar(100),Y_bar(100),C(100),T(4),C_real(100)
+    real XF,hx,YF,hy,pi,radius,sum,total,xr,sum1
+    integer i,j,M,N,NI,k,g
+    N=5
+    g=1
+    M=14
+    sum=0
+    total=1
+    XF=0.602
+    hx=0.003
+    YF=0.695
+    hy=0.004
+    ! Body of HomeWorkAPP2
+    !!溫度
+    do i=1,M
+        X(i)=XF
+        XF=XF+hx
+    enddo
+    !!膨脹厚度
+    do i=1,M
+        Y(i)=YF
+        YF=YF-hy
+        if(i==11)then
+            YF=YF-0.001
+        endif
+    enddo
+    write(*,*)"溫度"
+    do i=1,M
+        write(*,95)X(i)
+95      format(2X,F6.3)        
+    enddo
+    write(*,*)"膨脹厚度"
+    do i=1,M
+        write(*,895)Y(i)
+895     format(2X,F6.3)        
+    enddo 
+    
+    pi=atan(1.0)*4
+    
+    do i=1,N
+        XF=i
+        radius=pi/2*(2*XF-1)/N
+        NI=N+1-i
+        R(NI)=cos(radius)
+    enddo
+    !!座標轉換
+    do i=1,M
+        X_bar(i)=(2*X(i)-(X(M)+X(1)))/(X(M)-X(1))
+    enddo
+    !!拉格朗日插值法
+72  sum=0
+    do k=1,N
+        total=Y(k)
+        do i=1,N
+            if(i==k)then
+                goto 22
+            endif
+            total=total*(R(g)-X_bar(i))/(X_bar(k)-X_bar(i))
+22      enddo
+        sum=sum+total
+    enddo
+    Y_bar(g)=sum
+    if(g<N)then
+        g=g+1
+        goto 72
+    endif
+    C(1)=(Y_bar(1)+Y_bar(2))/2
+    T(1)=xr
+    T(2)=2*xr*xr-1
+    T(3)=4*xr*xr*xr-3*xr
+    T(4)=8*xr*xr*xr*xr-8*xr*xr+1
+    do i=2,N
+        sum=0
+        do k=1,N
+            if(i==2)then
+                xr=X_bar(k)
+                T(1)=xr
+                sum=sum+Y_bar(k)*T(1)
+                sum1=sum*2/N
+            elseif(i==3)then
+                xr=X_bar(k)
+                T(2)=2*xr*xr-1
+                sum=sum+Y_bar(k)*T(2)
+                sum1=sum*2/N
+            elseif(i==4)then
+                xr=X_bar(k)
+                T(3)=4*xr*xr*xr-3*xr
+                sum=sum+Y_bar(k)*T(3)
+                sum1=sum*2/N
+            elseif(i==5)then
+                xr=X_bar(k)
+                T(4)=8*xr*xr*xr*xr-8*xr*xr+1
+                sum=sum+Y_bar(k)*T(3)
+                sum1=sum*2/N
+            endif  
+        enddo
+        C(i)=sum1
+    enddo
+    write(*,88)C(1),C(2),C(3),C(4),C(5)
+88  format("F(x')",F8.3,"+",F8.3,"x'+",F8.3,"x'**2+",F8.3,"x'**3+",F8.3,"x'**4")
+    !!座標轉換 (2x-(b+a))/b-a =x'
+    write(*,*)"座標轉換:"
+    write(*,87)C(1),C(2),C(3),C(4),C(5)
+87  format("F(x)",F8.3,"+",F8.3,"(2x-(0.641+0.602))/(0.641-0.602)'+",F8.3,"(2x-(0.641+0.602))/(0.641-0.602)**2+",F8.3,"(2x-(0.641+0.602))/(0.641-0.602)**3+",F8.3,"(2x-(0.641+0.602))/(0.641-0.602)**4")
+    pause
+    end program HomeWorkAPP2

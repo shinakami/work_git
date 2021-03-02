@@ -1,0 +1,83 @@
+!  HomeWorkinter2.f90 
+!
+!  FUNCTIONS:
+!  HomeWorkinter2 - Entry point of console application.
+!
+
+!****************************************************************************
+!
+!  PROGRAM: HomeWorkinter2
+!
+!  PURPOSE:  Entry point for the console application.
+!
+!****************************************************************************
+
+    program HomeWorkinter2
+
+    implicit none
+
+    ! Variables
+    integer i,j,N,M,LM,KL,AK,K,MK
+    real X(7),Y(7,7)
+    real sum,sum1,sum2,Xr,h,r
+    N=7
+    Xr=0.58
+    sum=0
+    sum1=0
+    sum2=0
+    M=N/2+1
+    h=0.2
+    ! Body of HomeWorkinter2
+    X(1)=0.1
+    X(2)=0.3
+    X(3)=0.5
+    X(4)=0.7
+    X(5)=0.9
+    X(6)=1.1
+    X(7)=1.3
+    Y(1,1)=0.003
+    Y(2,1)=0.067
+    Y(3,1)=0.148
+    Y(4,1)=0.248
+    Y(5,1)=0.370
+    Y(6,1)=0.518
+    Y(7,1)=0.697
+    do i=2,N
+        do j=2,N
+            Y(i,j)=Y(i,j-1)-Y(i-1,j-1)
+        enddo
+    enddo
+    write(*,*)"差分表"
+    write(*,121)
+121 format(/5X,"X",7X,"Y")
+    do i=1,N
+        write(*,131)X(i),(Y(i,j),j=1,i)
+131     format(2X,11F8.3)
+    enddo
+    
+    !!公式(4.75)
+    r=(Xr-X(M))/h
+    sum1=r*(r-1)
+    sum2=r-0.5
+    sum=(Y(M,1)+Y(M+1,1))/2+sum1*(Y(M+2,3)+Y(M+1,3))/2+sum2*Y(M+1,2)
+    LM=(M-1)/2
+    KL=M/2
+    !!sum1
+    do K=1,LM
+        AK=K
+        sum1=(sum1*r*(r*r-AK*AK)*(r-AK+1))/((2*AK+2)*(2*AK+1))
+        MK=M+K
+        sum=sum+sum1*(Y(MK,2*K+2)+Y(MK+1,2*K+2))/2
+    enddo
+    !!sum2
+    do K=2,KL
+        AK=K
+        sum2=sum2*r*(r*r-(AK-1)*(AK-1))*(r-AK)/(AK*(2*AK-1))
+        MK=M+K
+        sum=sum+sum2*Y(MK,2*K)
+    enddo
+    write(*,154)Xr,sum
+154 format(/,"X=",F5.2,2X,"Y=",F5.2)
+    pause
+
+    end program HomeWorkinter2

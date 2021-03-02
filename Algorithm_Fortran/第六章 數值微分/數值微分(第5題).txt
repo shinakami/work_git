@@ -1,0 +1,39 @@
+!  HomeWorkdev1.f90 
+!
+!  FUNCTIONS:
+!  HomeWorkdev1 - Entry point of console application.
+!
+
+!****************************************************************************
+!
+!  PROGRAM: HomeWorkdev1
+!
+!  PURPOSE:  Entry point for the console application.
+!
+!****************************************************************************
+
+    program HomeWorkdev1
+
+    implicit none
+
+    ! Variables
+    real x,y,h,fr,fl,f0,x1,x2,dx,ddx,a
+    h=0.1
+    ! Body of HomeWorkdev1
+    write(*,*)"x="
+    read(*,*)x
+    y=x/3 !!function
+    f0=y
+    x1=x+h
+    fr=x1/3
+    x2=x-h
+    fl=x2/3
+    dx=(fr-fl)/(2*h)
+    ddx=(fr-2*f0+fl)/h**2
+    write(*,78)dx,ddx
+78  format("一次微分值=",F10.2,3X,"二次微分值=",F10.2,/)
+    a=(2*x-2*y-x**2*ddx)/(x*dx)
+    write(*,111)a
+111 format("a=",F10.2)
+    pause
+    end program HomeWorkdev1

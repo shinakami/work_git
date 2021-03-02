@@ -1,0 +1,108 @@
+!  HomeWorkmatrix4.f90 
+!
+!  FUNCTIONS:
+!  HomeWorkmatrix4 - Entry point of console application.
+!
+
+!****************************************************************************
+!
+!  PROGRAM: HomeWorkmatrix4
+!
+!  PURPOSE:  Entry point for the console application.
+!
+!****************************************************************************
+
+    program HomeWorkmatrix4
+
+    implicit none
+
+    ! Variables
+    real A(4,4),B(4),X(4),X_ans(4),D(4),C(4,4)
+    integer i,j,N,eps,k,kk,T
+    real test,sum
+    N=4
+    k=1
+    sum=0
+    test=1
+    eps=0.001
+    ! Body of HomeWorkmatrix4
+   !!A矩陣
+    A(1,1)=10
+    A(1,2)=2
+    A(1,3)=-3
+    A(1,4)=-1
+    A(2,1)=1
+    A(2,2)=-20
+    A(2,3)=-1
+    A(2,4)=3
+    A(3,1)=1
+    A(3,2)=1
+    A(3,3)=-10
+    A(3,4)=2
+    A(4,1)=2
+    A(4,2)=-1
+    A(4,3)=-1
+    A(4,4)=30
+    !!B矩陣
+    B(1)=80
+    B(2)=40
+    B(3)=40
+    B(4)=120
+    write(*,*)"A_matrix="
+    do i=1,N
+        write(*,15)(A(i,j),j=1,N)
+15      format(2X,4F6.2)        
+    enddo 
+    write(*,*)"B_matrix="
+    do i=1,N
+        write(*,95)B(i)
+95      format(2X,F6.2)        
+    enddo 
+    !!公式(3.134)
+    do i=1,N
+        D(i)=B(i)/A(i,i)
+    enddo
+    do i=1,N
+        do j=1,N
+            C(i,j)=A(i,j)/A(i,i)
+        enddo
+    enddo
+    do i=1,N
+        C(i,i)=0 !!對角線為零
+    enddo
+    write(*,*)"輸入測試次數="
+    read(*,*)T
+    write(*,*)"輸入測試初始值"
+    do i=1,N
+        write(*,87)i
+87      format("X(",I1,")=")
+        read(*,*)X(i)
+    enddo
+    do kk=1,T
+        do i=1,N
+            sum=0
+            do j=1,N
+                sum=sum+(C(i,j)*X(j))
+            enddo
+            X_ans(i)=D(i)-sum
+        enddo
+        do i=1,N
+            test=X_ans(i)-X(i)
+            if(abs(test)>eps)then
+                goto 147
+            elseif(abs(test)<=eps)then
+                goto 157
+            endif
+        enddo
+147     do i=1,N
+            X(i)=X_ans(i)
+        enddo
+    enddo
+157 write(*,98)kk-1
+98  format("收斂次數=",I5)
+    do i=1,N
+        write(*,88)i,X_ans(i)
+88      format("X(",I1,")=",F10.2)
+    enddo
+    pause
+    end program HomeWorkmatrix4
