@@ -1,0 +1,13 @@
+INPUT(
+./release\main.o
+./release\mainwindow.o
+./release\newdialog.o
+./release\overblock.o
+./release\manual.o
+./release\extrafunction.o
+./release\moc_mainwindow.o
+./release\moc_newdialog.o
+./release\moc_overblock.o
+./release\moc_manual.o
+./release\moc_extrafunction.o
+);
